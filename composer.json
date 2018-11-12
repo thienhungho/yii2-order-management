@@ -1,0 +1,25 @@
+{
+    "name": "thienhungho/yii2-order-management",
+    "description": "Yii2 Cart",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","order", "management"],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "thienhungho",
+            "email": "thienhungho@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "yiisoft/yii2": "~2.0.9",
+        "thienhungho/yii2-app-core": "*",
+        "thienhungho/yii2-product-management": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "thienhungho\\OrderManagement\\": "src/"
+        },
+        "files": ["src/functions/core.php", "src/const/core.php"]
+    }
+}
