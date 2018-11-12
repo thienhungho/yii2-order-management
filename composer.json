@@ -1,6 +1,6 @@
 {
     "name": "thienhungho/yii2-order-management",
-    "description": "Yii2 Cart",
+    "description": "Yii2 Order Management",
     "type": "yii2-extension",
     "keywords": ["yii2","extension","order", "management"],
     "license": "BSD-3-Clause",
