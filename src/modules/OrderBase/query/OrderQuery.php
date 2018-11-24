@@ -7,7 +7,7 @@ namespace thienhungho\OrderManagement\modules\OrderBase\query;
  *
  * @see Order
  */
-class OrderQuery extends \yii\db\ActiveQuery
+class OrderQuery extends \thienhungho\ActiveQuery\models\ActiveQuery
 {
     /*public function active()
     {
