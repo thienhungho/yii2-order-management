@@ -2,12 +2,12 @@
 
 namespace thienhungho\OrderManagement\modules\OrderManage\controllers;
 
-use Yii;
-use thienhungho\OrderManagement\modules\OrderBase\Order;
+use thienhungho\OrderManagement\models\Order;
 use thienhungho\OrderManagement\modules\OrderManage\search\OrderSearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -18,7 +18,7 @@ class OrderController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class'   => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
                 ],
@@ -36,7 +36,7 @@ class OrderController extends Controller
         $dataProvider = $searchModel->search(request()->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -53,8 +53,9 @@ class OrderController extends Controller
         $providerOrderItem = new \yii\data\ArrayDataProvider([
             'allModels' => $model->orderItems,
         ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model'             => $this->findModel($id),
             'providerOrderItem' => $providerOrderItem,
         ]);
     }
@@ -66,14 +67,38 @@ class OrderController extends Controller
     public function actionCreate()
     {
         $model = new Order();
-
-        if ($model->loadAll(request()->post()) && $model->saveAll()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
+        if (is_login()) {
+            $model = new Order([
+                'customer_username'   => get_current_user_name(),
+                'customer_email'      => get_current_user_email(),
+                'customer_name'       => Yii::$app->user->identity->full_name,
+                'customer_address'    => Yii::$app->user->identity->address,
+                'customer_company'    => Yii::$app->user->identity->company,
+                'customer_phone'      => Yii::$app->user->identity->phone,
+                'customer_tax_number' => Yii::$app->user->identity->tax_number,
+                'status'              => Order::STATUS_PENDING,
+                'payment_method'      => Order::PAYMENT_MEDTHOD_COD,
+                'include_vat'         => 'no',
+                'ref_by'              => get_current_user_id(),
             ]);
         }
+        if ($model->loadAll(request()->post())) {
+            if ($model->saveAll()) {
+                set_flash_has_been_saved();
+
+                return $this->redirect([
+                    'update',
+                    'id' => $model->id,
+                ]);
+            } else {
+                set_flash_has_not_been_saved();
+                print_r($model->errors);
+            }
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -87,17 +112,25 @@ class OrderController extends Controller
     {
         if (request()->post('_asnew') == '1') {
             $model = new Order();
-        }else{
+        } else {
             $model = $this->findModel($id);
         }
+        if ($model->loadAll(request()->post())) {
+            if ($model->saveAll()) {
+                set_flash_has_been_saved();
 
-        if ($model->loadAll(request()->post()) && $model->saveAll()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+                return $this->redirect([
+                    'update',
+                    'id' => $model->id,
+                ]);
+            } else {
+                set_flash_has_not_been_saved();
+            }
         }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -109,9 +142,54 @@ class OrderController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->deleteWithRelated();
+        $model = $this->findModel($id);
+        if ($model->deleteWithRelated()) {
+            set_flash_success_delete_content();
+        } else {
+            set_flash_error_delete_content();
+        }
 
-        return $this->redirect(['index']);
+        return $this->goBack(request()->referrer);
+    }
+
+    /**
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \yii\db\Exception
+     */
+    public function actionBulk()
+    {
+        $action = request()->post('action');
+        $ids = request()->post('selection');
+        if (!empty($ids)) {
+            if ($action == ACTION_DELETE) {
+                foreach ($ids as $id) {
+                    $model = $this->findModel($id);
+                    if ($model->deleteWithRelated()) {
+                        set_flash_success_delete_content();
+                    } else {
+                        set_flash_error_delete_content();
+                    }
+                }
+            } elseif (in_array($action, [
+                Order::STATUS_PENDING,
+                Order::STATUS_TRANSPORT,
+                Order::STATUS_SUCCESS,
+                Order::STATUS_PROCESSING,
+            ])) {
+                foreach ($ids as $id) {
+                    $model = $this->findModel($id);
+                    $model->status = $action;
+                    if ($model->save()) {
+                        set_flash_has_been_saved();
+                    } else {
+                        set_flash_has_not_been_saved();
+                    }
+                }
+            }
+        }
+
+        return $this->goBack(request()->referrer);
     }
 
     /**
@@ -120,30 +198,29 @@ class OrderController extends Controller
      * @return mixed
      * @throws NotFoundHttpException
      */
-    public function actionPdf($id) {
+    public function actionPdf($id)
+    {
         $model = $this->findModel($id);
         $providerOrderItem = new \yii\data\ArrayDataProvider([
             'allModels' => $model->orderItems,
         ]);
-
         $content = $this->renderAjax('_pdf', [
-            'model' => $model,
+            'model'             => $model,
             'providerOrderItem' => $providerOrderItem,
         ]);
-
         $pdf = new \kartik\mpdf\Pdf([
-            'mode' => \kartik\mpdf\Pdf::MODE_UTF8,
-            'format' => \kartik\mpdf\Pdf::FORMAT_A4,
+            'mode'        => \kartik\mpdf\Pdf::MODE_UTF8,
+            'format'      => \kartik\mpdf\Pdf::FORMAT_A4,
             'orientation' => \kartik\mpdf\Pdf::ORIENT_PORTRAIT,
             'destination' => \kartik\mpdf\Pdf::DEST_BROWSER,
-            'content' => $content,
-            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
-            'cssInline' => '.kv-heading-1{font-size:18px}',
-            'options' => ['title' => \Yii::$app->name],
-            'methods' => [
+            'content'     => $content,
+            'cssFile'     => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+            'cssInline'   => '.kv-heading-1{font-size:18px}',
+            'options'     => ['title' => \Yii::$app->name],
+            'methods'     => [
                 'SetHeader' => [\Yii::$app->name],
                 'SetFooter' => ['{PAGENO}'],
-            ]
+            ],
         ]);
 
         return $pdf->render();
@@ -156,26 +233,30 @@ class OrderController extends Controller
      * @throws NotFoundHttpException
      * @throws \yii\db\Exception
      */
-    public function actionSaveAsNew($id) {
+    public function actionSaveAsNew($id)
+    {
         $model = new Order();
-
         if (request()->post('_asnew') != '1') {
             $model = $this->findModel($id);
         }
-    
         if ($model->loadAll(request()->post()) && $model->saveAll()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect([
+                'view',
+                'id' => $model->id,
+            ]);
         } else {
             return $this->render('saveAsNew', [
                 'model' => $model,
             ]);
         }
     }
-    
+
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id
+     *
      * @return Order the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -196,10 +277,11 @@ class OrderController extends Controller
     {
         if (request()->isAjax) {
             $row = request()->post('OrderItem');
-            if((request()->post('isNewRecord')
+            if ((request()->post('isNewRecord')
                     && request()->post('_action') == 'load'
                     && empty($row)) || request()->post('_action') == 'add')
                 $row[] = [];
+
             return $this->renderAjax('_formOrderItem', ['row' => $row]);
         } else {
             throw new NotFoundHttpException(t('app', 'The requested page does not exist.'));

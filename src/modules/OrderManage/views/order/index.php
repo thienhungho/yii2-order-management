@@ -183,9 +183,10 @@ $this->registerJs($search);
                 'name'    => 'action',
                 'data'    => [
                     ACTION_DELETE  => t('app', 'Delete'),
-                    STATUS_DRAFT   => t('app', slug_to_text(STATUS_DRAFT)),
-                    STATUS_PENDING => t('app', slug_to_text(STATUS_PENDING)),
-                    STATUS_PUBLIC  => t('app', slug_to_text(STATUS_PUBLIC)),
+                    Order::STATUS_PENDING   => t('app', slug_to_text(Order::STATUS_PENDING)),
+                    Order::STATUS_PROCESSING => t('app', slug_to_text(Order::STATUS_PROCESSING)),
+                    Order::STATUS_TRANSPORT  => t('app', slug_to_text(Order::STATUS_TRANSPORT)),
+                    Order::STATUS_SUCCESS  => t('app', slug_to_text(Order::STATUS_SUCCESS)),
                 ],
                 'theme'   => \kartik\widgets\Select2::THEME_BOOTSTRAP,
                 'options' => [

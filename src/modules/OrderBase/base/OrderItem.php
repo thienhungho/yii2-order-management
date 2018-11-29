@@ -2,8 +2,10 @@
 
 namespace thienhungho\OrderManagement\modules\OrderBase\base;
 
+use thienhungho\ProductManagement\models\Product;
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the base model class for table "order_item".
@@ -20,7 +22,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $updated_by
  *
  * @property \thienhungho\OrderManagement\modules\OrderBase\Order $order0
- * @property \thienhungho\OrderManagement\modules\OrderBase\Product $product0
+ * @property \thienhungho\ProductManagement\models\Product $product0
  */
 class OrderItem extends \yii\db\ActiveRecord
 {
@@ -45,11 +47,11 @@ class OrderItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order', 'product', 'product_price', 'quantity'], 'required'],
-            [['order', 'product', 'quantity', 'created_by', 'updated_by'], 'integer'],
-            [['product_price'], 'number'],
+            [['order', 'product', 'quantity'], 'required'],
+            [['order', 'product', 'created_by', 'updated_by'], 'integer'],
+            [['product_price', 'total_price', 'quantity', 'real_value', 'discount_value'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
-            [['coupon'], 'string', 'max' => 255]
+            [['coupon', 'product_unit', 'currency_unit'], 'string', 'max' => 255]
         ];
     }
 
@@ -72,7 +74,12 @@ class OrderItem extends \yii\db\ActiveRecord
             'product' => Yii::t('app', 'Product'),
             'product_price' => Yii::t('app', 'Product Price'),
             'quantity' => Yii::t('app', 'Quantity'),
+            'total_price' => Yii::t('app', 'Total Price'),
+            'real_value' => Yii::t('app', 'Real Value'),
+            'Discount Value' => Yii::t('app', 'Discount Value'),
             'coupon' => Yii::t('app', 'Coupon'),
+            'product_unit' => Yii::t('app', 'Product Unit'),
+            'currency_unit' => Yii::t('app', 'Currency Unit'),
         ];
     }
     
@@ -81,7 +88,7 @@ class OrderItem extends \yii\db\ActiveRecord
      */
     public function getOrder0()
     {
-        return $this->hasOne(\thienhungho\OrderManagement\modules\OrderBase\Order::className(), ['id' => 'order']);
+        return $this->hasOne(\thienhungho\OrderManagement\models\Order::className(), ['id' => 'order']);
     }
         
     /**
@@ -89,7 +96,7 @@ class OrderItem extends \yii\db\ActiveRecord
      */
     public function getProduct0()
     {
-        return $this->hasOne(\thienhungho\OrderManagement\modules\OrderBase\Product::className(), ['id' => 'product']);
+        return $this->hasOne(Product::className(), ['id' => 'product']);
     }
     
     /**
@@ -101,9 +108,10 @@ class OrderItem extends \yii\db\ActiveRecord
         return [
             'timestamp' => [
                 'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => 'updated_at',
-                'value' => new \yii\db\Expression('NOW()'),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ]
             ],
         ];
     }

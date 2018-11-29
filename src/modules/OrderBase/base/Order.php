@@ -43,7 +43,7 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             'orderItems',
-            'ref_by'
+            'refBy0'
         ];
     }
 
@@ -98,13 +98,13 @@ class Order extends \yii\db\ActiveRecord
      */
     public function getOrderItems()
     {
-        return $this->hasMany(\thienhungho\OrderManagement\modules\OrderBase\OrderItem::className(), ['order' => 'id']);
+        return $this->hasMany(\thienhungho\OrderManagement\models\OrderItem::className(), ['order' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRefBy()
+    public function getRefBy0()
     {
         return $this->hasOne(User::className(), ['ref_by' => 'id']);
     }
