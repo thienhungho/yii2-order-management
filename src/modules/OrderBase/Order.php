@@ -10,6 +10,18 @@ use \thienhungho\OrderManagement\modules\OrderBase\base\Order as BaseOrder;
  */
 class Order extends BaseOrder
 {
+    const STATUS_SUCCESS = 'success';
+    const STATUS_PENDING = 'pending';
+    const STATUS_PROCESSING = 'processing';
+    const STATUS_TRANSPORT = 'transport';
+
+    public static $all_status = [
+        'pending' => 'Pending',
+        'processing' => 'Processing',
+        'transport' => 'Transport',
+        'success' =>  'Success',
+    ];
+
     /**
      * @inheritdoc
      */

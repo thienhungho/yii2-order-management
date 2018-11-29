@@ -2,6 +2,7 @@
 
 namespace thienhungho\OrderManagement\modules\OrderBase\base;
 
+use thienhungho\UserManagement\models\User;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -41,7 +42,8 @@ class Order extends \yii\db\ActiveRecord
     public function relationNames()
     {
         return [
-            'orderItems'
+            'orderItems',
+            'ref_by'
         ];
     }
 
@@ -97,6 +99,14 @@ class Order extends \yii\db\ActiveRecord
     public function getOrderItems()
     {
         return $this->hasMany(\thienhungho\OrderManagement\modules\OrderBase\OrderItem::className(), ['order' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRefBy()
+    {
+        return $this->hasOne(User::className(), ['ref_by' => 'id']);
     }
     
     /**
