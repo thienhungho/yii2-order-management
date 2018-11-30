@@ -106,7 +106,7 @@ class Order extends \yii\db\ActiveRecord
      */
     public function getRefBy0()
     {
-        return $this->hasOne(User::className(), ['ref_by' => 'id']);
+        return $this->hasOne(User::className(), ['id' => 'ref_by']);
     }
     
     /**

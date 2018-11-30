@@ -58,46 +58,68 @@
                 'label' => Yii::t('app', 'Product Unit'),
             ],
             'product_price'  => [
-                'label' => Yii::t('app', 'Product Price'),
-                'type'  => 'raw',
-                'value' => function($model, $key) {
-                    if (!empty($model['product_price']) && !empty($model['currency_unit'])) {
-                        return '<span style="font-weight: bold; color: darkblue">' . format_product_price($model['product_price']) . '</span>' . ' (' . $model['currency_unit'] . ')';
-                    }
-                    return null;
-                },
+                'label'       => Yii::t('app', 'Product Price'),
+                'type'        => TabularForm::INPUT_WIDGET,
+                'widgetClass' => \kartik\number\NumberControl::classname(),
+                'options'     => [
+                    'maskedInputOptions' => [
+                        'prefix' => ' ',
+                        'suffix' => ' ',
+                        'digits' => 2,
+                    ],
+                    'readonly'           => true,
+                    'displayOptions'     => ['class' => 'form-control kv-monospace'],
+                    'saveInputContainer' => ['class' => 'kv-saved-cont'],
+                ],
             ],
             'real_value'     => [
-                'label' => Yii::t('app', 'Real Value'),
-                'type'  => TabularForm::INPUT_RAW,
-                'value' => function($model, $key) {
-                    if (!empty($model['real_value']) && !empty($model['currency_unit'])) {
-                        return '<span style="font-weight: bold; color: red">' . format_product_price($model['real_value']) . '</span>' . ' (' . $model['currency_unit'] . ')';
-                    }
-                    return null;
-                },
+                'label'       => Yii::t('app', 'Real Value'),
+                'type'        => TabularForm::INPUT_WIDGET,
+                'widgetClass' => \kartik\number\NumberControl::classname(),
+                'options'     => [
+                    'maskedInputOptions' => [
+                        'prefix' => ' ',
+                        'suffix' => ' ',
+                        'digits' => 2,
+                    ],
+                    'readonly'           => true,
+                    'displayOptions'     => ['class' => 'form-control kv-monospace'],
+                    'saveInputContainer' => ['class' => 'kv-saved-cont'],
+                ],
             ],
             'discount_value' => [
-                'label' => Yii::t('app', 'Discount Value'),
-                'type'  => TabularForm::INPUT_RAW,
-                'value' => function($model, $key) {
-                    if (!empty($model['discount_value']) && !empty($model['currency_unit'])) {
-                        return '<span style="font-weight: bold; color: darkgreen">' . format_product_price($model['discount_value']) . '</span>' . ' (' . $model['currency_unit'] . ')';
-                    }
-
-                    return null;
-                },
+                'label'       => Yii::t('app', 'Discount Value'),
+                'type'        => TabularForm::INPUT_WIDGET,
+                'widgetClass' => \kartik\number\NumberControl::classname(),
+                'options'     => [
+                    'maskedInputOptions' => [
+                        'prefix' => ' ',
+                        'suffix' => ' ',
+                        'digits' => 2,
+                    ],
+                    'readonly'           => true,
+                    'displayOptions'     => ['class' => 'form-control kv-monospace'],
+                    'saveInputContainer' => ['class' => 'kv-saved-cont'],
+                ],
             ],
             'total_price'    => [
-                'label' => Yii::t('app', 'Total Price'),
-                'type'  => TabularForm::INPUT_RAW,
-                'value' => function($model, $key) {
-                    if (!empty($model['total_price']) && !empty($model['currency_unit'])) {
-                        return '<span style="font-weight: bold; color: green">' . format_product_price($model['total_price']) . '</span>' . ' (' . $model['currency_unit'] . ')';
-                    }
-
-                    return null;
-                },
+                'label'       => Yii::t('app', 'Total Price'),
+                'type'        => TabularForm::INPUT_WIDGET,
+                'widgetClass' => \kartik\number\NumberControl::classname(),
+                'options'     => [
+                    'maskedInputOptions' => [
+                        'prefix' => ' ',
+                        'suffix' => ' ',
+                        'digits' => 2,
+                    ],
+                    'readonly'           => true,
+                    'displayOptions'     => ['class' => 'form-control kv-monospace'],
+                    'saveInputContainer' => ['class' => 'kv-saved-cont'],
+                ],
+            ],
+            'currency_unit'    => [
+                'type'  => TabularForm::INPUT_HIDDEN_STATIC,
+                'label' => Yii::t('app', 'Currency Unit'),
             ],
             'coupon'         => [
                 'type'  => TabularForm::INPUT_TEXT,
