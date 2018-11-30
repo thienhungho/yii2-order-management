@@ -58,6 +58,8 @@ class Order extends \yii\db\ActiveRecord
             [['ref_by', 'created_by', 'updated_by'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['status', 'payment_method', 'customer_username', 'customer_phone', 'customer_name', 'customer_email', 'customer_address', 'customer_company', 'customer_area', 'customer_tax_number'], 'string', 'max' => 255],
+            [['total_price', 'real_value', 'discount_value'], 'number'],
+            [['total_price', 'real_value', 'discount_value'], 'default', 'value' => 0, 'on' => 'insert'],
             [['include_vat'], 'string', 'max' => 10]
         ];
     }
@@ -90,6 +92,11 @@ class Order extends \yii\db\ActiveRecord
             'customer_area' => Yii::t('app', 'Customer Area'),
             'customer_tax_number' => Yii::t('app', 'Customer Tax Number'),
             'ref_by' => Yii::t('app', 'Ref By'),
+            'total_price' => Yii::t('app', 'Total Price'),
+            'real_value' => Yii::t('app', 'Real Value'),
+            'discount_value' => Yii::t('app', 'Discount Value'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'created_by' => Yii::t('app', 'Created By'),
         ];
     }
     

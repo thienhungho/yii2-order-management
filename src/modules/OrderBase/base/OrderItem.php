@@ -76,7 +76,7 @@ class OrderItem extends \yii\db\ActiveRecord
             'quantity' => Yii::t('app', 'Quantity'),
             'total_price' => Yii::t('app', 'Total Price'),
             'real_value' => Yii::t('app', 'Real Value'),
-            'Discount Value' => Yii::t('app', 'Discount Value'),
+            'discount_value' => Yii::t('app', 'Discount Value'),
             'coupon' => Yii::t('app', 'Coupon'),
             'product_unit' => Yii::t('app', 'Product Unit'),
             'currency_unit' => Yii::t('app', 'Currency Unit'),

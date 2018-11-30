@@ -64,5 +64,24 @@ class OrderItem extends BaseOrderItem
 
         return false;
     }
-	
+
+    /**
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        $order = $this->order0;
+        $order->total_price = \thienhungho\OrderManagement\models\OrderItem::find()
+            ->where(['order' => $this->id])
+            ->sum('total_price');
+        $order->real_value = \thienhungho\OrderManagement\models\OrderItem::find()
+            ->where(['order' => $this->id])
+            ->sum('real_value');
+        $order->discount_value = \thienhungho\OrderManagement\models\OrderItem::find()
+            ->where(['order' => $this->id])
+            ->sum('discount_value');
+        $order->save();
+    }
 }

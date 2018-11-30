@@ -55,4 +55,32 @@ class Order extends BaseOrder
         ]);
     }
 
+    /**
+     * @param bool $insert
+     *
+     * @return bool
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if (!$this->isNewRecord) {
+                $this->total_price = \thienhungho\OrderManagement\models\OrderItem::find()
+                    ->where(['order' => $this->id])
+                    ->sum('total_price');
+                $this->real_value = \thienhungho\OrderManagement\models\OrderItem::find()
+                    ->where(['order' => $this->id])
+                    ->sum('real_value');
+                $this->discount_value = \thienhungho\OrderManagement\models\OrderItem::find()
+                    ->where(['order' => $this->id])
+                    ->sum('discount_value');
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
 }

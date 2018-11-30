@@ -36,6 +36,12 @@ Add module OrderManage to your `AppConfig` file.
     'order-manage' => [
         'class' => 'thienhungho\OrderManagement\modules\OrderManage\OrderManage',
     ],
+    /**
+     * My Order
+     */
+    'my-order' => [
+        'class' => 'thienhungho\OrderManagement\modules\MyOrder\MyOrder',
+    ],
     ...
 ],
 ...
@@ -71,7 +77,7 @@ yii migrate/up
 Modules
 ------------
 
-[OrderBase](https://github.com/thienhungho/yii2-order-management/tree/master/src/modules/OrderBase), [OrderManage](https://github.com/thienhungho/yii2-order-management/tree/master/src/modules/OrderManage), 
+[OrderBase](https://github.com/thienhungho/yii2-order-management/tree/master/src/modules/OrderBase), [OrderManage](https://github.com/thienhungho/yii2-order-management/tree/master/src/modules/OrderManage), [MyOrder](https://github.com/thienhungho/yii2-order-management/tree/master/src/modules/MyOrder), 
 
 Functions
 ------------

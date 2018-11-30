@@ -1,6 +1,6 @@
 <?php
 
-namespace thienhungho\OrderManagement\modules\OrderManage\search;
+namespace thienhungho\OrderManagement\modules\MyOrder\search;
 
 use Yii;
 use yii\base\Model;
@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use thienhungho\OrderManagement\modules\OrderBase\Order;
 
 /**
- * thienhungho\OrderManagement\modules\OrderManage\search\OrderSearch represents the model behind the search form about `thienhungho\OrderManagement\modules\OrderBase\Order`.
+ * thienhungho\OrderManagement\modules\MyOrder\search\OrderSearch represents the model behind the search form about `thienhungho\OrderManagement\modules\OrderBase\Order`.
  */
  class OrderSearch extends Order
 {
@@ -19,7 +19,7 @@ use thienhungho\OrderManagement\modules\OrderBase\Order;
     {
         return [
             [['id', 'ref_by', 'created_by', 'updated_by'], 'integer'],
-            [['status', 'payment_method', 'note', 'include_vat', 'customer_username', 'customer_phone', 'customer_name', 'customer_email', 'customer_address', 'customer_company', 'customer_area', 'customer_tax_number', 'created_at', 'updated_at', 'real_value', 'discount_value', 'total_value'], 'safe'],
+            [['status', 'payment_method', 'note', 'include_vat', 'customer_username', 'customer_phone', 'customer_name', 'customer_email', 'customer_address', 'customer_company', 'customer_area', 'customer_tax_number', 'created_at', 'updated_at', 'real_value', 'discount_value', 'total_price'], 'safe'],
         ];
     }
 
