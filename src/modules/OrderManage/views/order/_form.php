@@ -159,6 +159,13 @@ use yii\helpers\Html;
             ],
         ])->hint(Yii::t('app', 'Choose Ref User for this order')) ?>
 
+        <?= $form->field($model, 'delivery_address', [
+            'addon' => ['prepend' => ['content' => '<span class="fa fa-map-marker"></span>']],
+        ])->textarea([
+            'maxlength'   => true,
+            'placeholder' => t('app', 'Delivery Address'),
+        ]) ?>
+
         <?= $form->field($model, 'note')->textarea(['rows' => 6]) ?>
 
     </div>

@@ -80,6 +80,7 @@ class OrderController extends Controller
                 'payment_method'      => Order::PAYMENT_MEDTHOD_COD,
                 'include_vat'         => 'no',
                 'ref_by'              => get_current_user_id(),
+                'delivery_address'    => Yii::$app->user->identity->address,
             ]);
         }
         if ($model->loadAll(request()->post())) {

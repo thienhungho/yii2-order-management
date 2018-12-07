@@ -84,6 +84,7 @@ class OrderController extends Controller
                 'payment_method'      => Order::PAYMENT_MEDTHOD_COD,
                 'include_vat'         => 'no',
                 'ref_by'              => get_current_user_id(),
+                'delivery_address'    => Yii::$app->user->identity->address,
             ]);
         }
         if ($model->loadAll(request()->post())) {
@@ -105,97 +106,94 @@ class OrderController extends Controller
         ]);
     }
 
-//    /**
-//     * @param $id
-//     *
-//     * @return string|\yii\web\Response
-//     * @throws NotFoundHttpException
-//     * @throws \yii\db\Exception
-//     */
-//    public function actionUpdate($id)
-//    {
-//        if (request()->post('_asnew') == '1') {
-//            $model = new Order();
-//        } else {
-//            $model = $this->findModel($id);
-//        }
-//        if ($model->loadAll(request()->post())) {
-//            if ($model->saveAll()) {
-//                set_flash_has_been_saved();
-//
-//                return $this->redirect([
-//                    'update',
-//                    'id' => $model->id,
-//                ]);
-//            } else {
-//                set_flash_has_not_been_saved();
-//            }
-//        }
-//
-//        return $this->render('update', [
-//            'model' => $model,
-//        ]);
-//    }
-
-//    /**
-//     * @param $id
-//     *
-//     * @return \yii\web\Response
-//     * @throws NotFoundHttpException
-//     * @throws \yii\db\Exception
-//     */
-//    public function actionDelete($id)
-//    {
-//        $model = $this->findModel($id);
-//        if ($model->deleteWithRelated()) {
-//            set_flash_success_delete_content();
-//        } else {
-//            set_flash_error_delete_content();
-//        }
-//
-//        return $this->goBack(request()->referrer);
-//    }
-
-//    /**
-//     * @return \yii\web\Response
-//     * @throws NotFoundHttpException
-//     * @throws \yii\db\Exception
-//     */
-//    public function actionBulk()
-//    {
-//        $action = request()->post('action');
-//        $ids = request()->post('selection');
-//        if (!empty($ids)) {
-//            if ($action == ACTION_DELETE) {
-//                foreach ($ids as $id) {
-//                    $model = $this->findModel($id);
-//                    if ($model->deleteWithRelated()) {
-//                        set_flash_success_delete_content();
-//                    } else {
-//                        set_flash_error_delete_content();
-//                    }
-//                }
-//            } elseif (in_array($action, [
-//                Order::STATUS_PENDING,
-//                Order::STATUS_TRANSPORT,
-//                Order::STATUS_SUCCESS,
-//                Order::STATUS_PROCESSING,
-//            ])) {
-//                foreach ($ids as $id) {
-//                    $model = $this->findModel($id);
-//                    $model->status = $action;
-//                    if ($model->save()) {
-//                        set_flash_has_been_saved();
-//                    } else {
-//                        set_flash_has_not_been_saved();
-//                    }
-//                }
-//            }
-//        }
-//
-//        return $this->goBack(request()->referrer);
-//    }
-
+    //    /**
+    //     * @param $id
+    //     *
+    //     * @return string|\yii\web\Response
+    //     * @throws NotFoundHttpException
+    //     * @throws \yii\db\Exception
+    //     */
+    //    public function actionUpdate($id)
+    //    {
+    //        if (request()->post('_asnew') == '1') {
+    //            $model = new Order();
+    //        } else {
+    //            $model = $this->findModel($id);
+    //        }
+    //        if ($model->loadAll(request()->post())) {
+    //            if ($model->saveAll()) {
+    //                set_flash_has_been_saved();
+    //
+    //                return $this->redirect([
+    //                    'update',
+    //                    'id' => $model->id,
+    //                ]);
+    //            } else {
+    //                set_flash_has_not_been_saved();
+    //            }
+    //        }
+    //
+    //        return $this->render('update', [
+    //            'model' => $model,
+    //        ]);
+    //    }
+    //    /**
+    //     * @param $id
+    //     *
+    //     * @return \yii\web\Response
+    //     * @throws NotFoundHttpException
+    //     * @throws \yii\db\Exception
+    //     */
+    //    public function actionDelete($id)
+    //    {
+    //        $model = $this->findModel($id);
+    //        if ($model->deleteWithRelated()) {
+    //            set_flash_success_delete_content();
+    //        } else {
+    //            set_flash_error_delete_content();
+    //        }
+    //
+    //        return $this->goBack(request()->referrer);
+    //    }
+    //    /**
+    //     * @return \yii\web\Response
+    //     * @throws NotFoundHttpException
+    //     * @throws \yii\db\Exception
+    //     */
+    //    public function actionBulk()
+    //    {
+    //        $action = request()->post('action');
+    //        $ids = request()->post('selection');
+    //        if (!empty($ids)) {
+    //            if ($action == ACTION_DELETE) {
+    //                foreach ($ids as $id) {
+    //                    $model = $this->findModel($id);
+    //                    if ($model->deleteWithRelated()) {
+    //                        set_flash_success_delete_content();
+    //                    } else {
+    //                        set_flash_error_delete_content();
+    //                    }
+    //                }
+    //            } elseif (in_array($action, [
+    //                Order::STATUS_PENDING,
+    //                Order::STATUS_TRANSPORT,
+    //                Order::STATUS_SUCCESS,
+    //                Order::STATUS_PROCESSING,
+    //            ])) {
+    //                foreach ($ids as $id) {
+    //                    $model = $this->findModel($id);
+    //                    $model->status = $action;
+    //                    if ($model->save()) {
+    //                        set_flash_has_been_saved();
+    //                    } else {
+    //                        set_flash_has_not_been_saved();
+    //                    }
+    //                }
+    //            }
+    //        }
+    //
+    //        return $this->goBack(request()->referrer);
+    //    }
     /**
      * @param $id
      *

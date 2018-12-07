@@ -58,8 +58,6 @@ use thienhungho\OrderManagement\modules\OrderBase\Order;
         $query->andFilterWhere([
             'id' => $this->id,
             'ref_by' => $this->ref_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
         ]);
@@ -78,7 +76,9 @@ use thienhungho\OrderManagement\modules\OrderBase\Order;
             ->andFilterWhere(['like', 'customer_tax_number', $this->customer_tax_number])
             ->andFilterWhere(['like', 'real_value', $this->real_value])
             ->andFilterWhere(['like', 'discount_value', $this->discount_value])
-            ->andFilterWhere(['like', 'total_price', $this->total_price]);
+            ->andFilterWhere(['like', 'total_price', $this->total_price])
+            ->andFilterWhere(['like', 'created_at', $this->created_at])
+            ->andFilterWhere(['like', 'updated_at', $this->created_at]);
 
         return $dataProvider;
     }

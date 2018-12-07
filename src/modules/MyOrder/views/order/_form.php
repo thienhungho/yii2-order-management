@@ -48,6 +48,7 @@ use yii\helpers\Html;
             'pluginOptions' => [
                 'allowClear' => true,
             ],
+            'disabled' => true
         ])->hint(Yii::t('app', 'Choose Customer for this order')) ?>
 
         <?= $form->field($model, 'customer_phone', [
@@ -55,6 +56,7 @@ use yii\helpers\Html;
         ])->textInput([
             'maxlength'   => true,
             'placeholder' => t('app', 'Customer Phone'),
+            'readonly' => true
         ]) ?>
 
         <?= $form->field($model, 'customer_name', [
@@ -62,6 +64,7 @@ use yii\helpers\Html;
         ])->textInput([
             'maxlength'   => true,
             'placeholder' => t('app', 'Customer Name'),
+            'readonly' => true
         ]) ?>
 
         <?= $form->field($model, 'customer_email', [
@@ -69,6 +72,7 @@ use yii\helpers\Html;
         ])->textInput([
             'maxlength'   => true,
             'placeholder' => t('app', 'Customer Email'),
+            'readonly' => true
         ]) ?>
 
         <?= $form->field($model, 'customer_address', [
@@ -76,6 +80,7 @@ use yii\helpers\Html;
         ])->textarea([
             'maxlength'   => true,
             'placeholder' => t('app', 'Customer Address'),
+            'readonly' => true
         ]) ?>
 
         <?= $form->field($model, 'customer_company', [
@@ -83,6 +88,7 @@ use yii\helpers\Html;
         ])->textInput([
             'maxlength'   => true,
             'placeholder' => t('app', 'Customer Company'),
+            'readonly' => true
         ]) ?>
 
         <?= $form->field($model, 'customer_area', [
@@ -90,6 +96,7 @@ use yii\helpers\Html;
         ])->textarea([
             'maxlength'   => true,
             'placeholder' => t('app', 'Customer Area'),
+            'readonly' => true
         ]) ?>
 
         <?= $form->field($model, 'customer_tax_number', [
@@ -97,6 +104,7 @@ use yii\helpers\Html;
         ])->textInput([
             'maxlength'   => true,
             'placeholder' => 'Customer Tax Number',
+            'readonly' => true
         ]) ?>
 
     </div>
@@ -105,15 +113,20 @@ use yii\helpers\Html;
 
         <?= $form->field($model, 'status', [
             'addon' => ['prepend' => ['content' => '<span class="fa fa-eye"></span>']],
-        ])->radioButtonGroup([
-            Order::STATUS_PENDING    => t('app', slug_to_text(Order::STATUS_PENDING)),
-            Order::STATUS_PROCESSING => t('app', slug_to_text(Order::STATUS_PROCESSING)),
-            Order::STATUS_TRANSPORT  => t('app', slug_to_text(Order::STATUS_TRANSPORT)),
-            Order::STATUS_SUCCESS    => t('app', slug_to_text(Order::STATUS_SUCCESS)),
-        ], [
-            'class'       => 'btn-group-sm',
-            'itemOptions' => ['labelOptions' => ['class' => 'btn green']],
-        ]); ?>
+        ])->widget(\kartik\widgets\Select2::classname(), [
+            'data'          => [
+                Order::STATUS_PENDING    => t('app', slug_to_text(Order::STATUS_PENDING)),
+                Order::STATUS_PROCESSING => t('app', slug_to_text(Order::STATUS_PROCESSING)),
+                Order::STATUS_TRANSPORT  => t('app', slug_to_text(Order::STATUS_TRANSPORT)),
+                Order::STATUS_SUCCESS    => t('app', slug_to_text(Order::STATUS_SUCCESS)),
+            ],
+            'theme'         => \kartik\widgets\Select2::THEME_BOOTSTRAP,
+            'options'       => ['placeholder' => t('app', 'Status')],
+            'pluginOptions' => [
+                'allowClear' => true,
+            ],
+            'disabled' => true
+        ]) ?>
 
         <?= $form->field($model, 'payment_method', [
             'addon' => ['prepend' => ['content' => '<span class="fa fa-money"></span>']],
@@ -138,26 +151,12 @@ use yii\helpers\Html;
             'itemOptions' => ['labelOptions' => ['class' => 'btn green']],
         ]); ?>
 
-        <?= $form->field($model, 'ref_by', [
-            'addon'        => ['prepend' => ['content' => '<span class="fa fa-user"></span>']],
-            'hintType'     => \kartik\form\ActiveField::HINT_SPECIAL,
-            'hintSettings' => [
-                'showIcon' => true,
-                'title'    => '<i class="glyphicon glyphicon-info-sign"></i> ' . Yii::t('app', 'Note'),
-            ],
-        ])->widget(\kartik\widgets\Select2::classname(), [
-            'data'          => \yii\helpers\ArrayHelper::map(
-                \thienhungho\UserManagement\models\User::find()
-                    ->orderBy('id')
-                    ->asArray()
-                    ->all(), 'id', 'username'
-            ),
-            'theme'         => \kartik\widgets\Select2::THEME_BOOTSTRAP,
-            'options'       => ['placeholder' => t('app', 'Choose User')],
-            'pluginOptions' => [
-                'allowClear' => true,
-            ],
-        ])->hint(Yii::t('app', 'Choose Ref User for this order')) ?>
+        <?= $form->field($model, 'delivery_address', [
+            'addon' => ['prepend' => ['content' => '<span class="fa fa-map-marker"></span>']],
+        ])->textarea([
+            'maxlength'   => true,
+            'placeholder' => t('app', 'Delivery Address'),
+        ]) ?>
 
         <?= $form->field($model, 'note')->textarea(['rows' => 6]) ?>
 

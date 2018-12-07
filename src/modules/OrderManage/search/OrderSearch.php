@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use thienhungho\OrderManagement\modules\OrderBase\Order;
 
 /**
- * thienhungho\OrderManagement\modules\OrderManage\search\OrderSearch represents the model behind the search form about `thienhungho\OrderManagement\modules\OrderBase\Order`.
+ * thienhungho\OrderManagement\modules\MyOrder\search\OrderSearch represents the model behind the search form about `thienhungho\OrderManagement\modules\OrderBase\Order`.
  */
  class OrderSearch extends Order
 {
@@ -19,7 +19,7 @@ use thienhungho\OrderManagement\modules\OrderBase\Order;
     {
         return [
             [['id', 'ref_by', 'created_by', 'updated_by'], 'integer'],
-            [['status', 'payment_method', 'note', 'include_vat', 'customer_username', 'customer_phone', 'customer_name', 'customer_email', 'customer_address', 'customer_company', 'customer_area', 'customer_tax_number', 'created_at', 'updated_at', 'real_value', 'discount_value', 'total_value'], 'safe'],
+            [['status', 'payment_method', 'note', 'include_vat', 'customer_username', 'customer_phone', 'customer_name', 'customer_email', 'customer_address', 'customer_company', 'customer_area', 'customer_tax_number', 'created_at', 'updated_at', 'real_value', 'discount_value', 'total_price'], 'safe'],
         ];
     }
 
@@ -58,8 +58,6 @@ use thienhungho\OrderManagement\modules\OrderBase\Order;
         $query->andFilterWhere([
             'id' => $this->id,
             'ref_by' => $this->ref_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
         ]);
@@ -78,7 +76,9 @@ use thienhungho\OrderManagement\modules\OrderBase\Order;
             ->andFilterWhere(['like', 'customer_tax_number', $this->customer_tax_number])
             ->andFilterWhere(['like', 'real_value', $this->real_value])
             ->andFilterWhere(['like', 'discount_value', $this->discount_value])
-            ->andFilterWhere(['like', 'total_price', $this->total_price]);
+            ->andFilterWhere(['like', 'total_price', $this->total_price])
+            ->andFilterWhere(['like', 'created_at', $this->created_at])
+            ->andFilterWhere(['like', 'updated_at', $this->created_at]);
 
         return $dataProvider;
     }
