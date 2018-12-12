@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use kartik\grid\GridView;
+use thienhungho\Widgets\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model thienhungho\OrderManagement\modules\OrderBase\Order */

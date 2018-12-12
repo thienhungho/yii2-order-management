@@ -1,5 +1,5 @@
 <?php
-use kartik\grid\GridView;
+use thienhungho\Widgets\GridView;
 use yii\data\ArrayDataProvider;
 
     $dataProvider = new ArrayDataProvider([

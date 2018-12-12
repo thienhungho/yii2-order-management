@@ -5,7 +5,7 @@ namespace thienhungho\OrderManagement\modules\OrderBase\query;
 /**
  * This is the ActiveQuery class for [[Order]].
  *
- * @see Order
+ * @see GridView
  */
 class OrderQuery extends \thienhungho\ActiveQuery\models\ActiveQuery
 {
