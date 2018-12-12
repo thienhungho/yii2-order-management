@@ -45,7 +45,7 @@ $this->registerJs($search);
 
         <?php
         $gridColumn = [
-            grid_serial_column(),
+            ['class' => '\kartik\grid\SerialColumn'],
             grid_checkbox_column(),
             [
                 'attribute' => 'id',
@@ -83,7 +83,10 @@ $this->registerJs($search);
                 ],
             ],
             'customer_phone',
-            'customer_name',
+            [
+                'attribute'     => 'customer_name',
+                'headerOptions' => ['style' => 'min-width:120px;'],
+            ],
             'customer_email:email',
             //        'customer_address',
             //        'customer_company',
@@ -113,29 +116,29 @@ $this->registerJs($search);
                     'id'          => 'grid-order-search-ref-by',
                 ],
             ],
-            [
-                'format'              => 'raw',
-                'attribute'           => 'payment_method',
-                'value'               => function($model, $key, $index, $column) {
-                    return '<span class="label-primary label">'. t('app', slug_to_text($model->payment_method)) . '</span>';
-                },
-                'filterType'          => GridView::FILTER_SELECT2,
-                'filter'              => [
-                    Order::PAYMENT_MEDTHOD_COD            => t('app', slug_to_text(Order::PAYMENT_MEDTHOD_COD)),
-                    Order::PAYMENT_MEDTHOD_VISA           => t('app', slug_to_text(Order::PAYMENT_MEDTHOD_VISA)),
-                    Order::PAYMENT_MEDTHOD_MASTER_CARD    => t('app', slug_to_text(Order::PAYMENT_MEDTHOD_MASTER_CARD)),
-                    Order::PAYMENT_MEDTHOD_PAYPAL         => t('app', slug_to_text(Order::PAYMENT_MEDTHOD_PAYPAL)),
-                    Order::PAYMENT_MEDTHOD_ONLINE_BANKING => t('app', slug_to_text(Order::PAYMENT_MEDTHOD_ONLINE_BANKING)),
-                    Order::PAYMENT_MEDTHOD_CASH           => t('app', slug_to_text(Order::PAYMENT_MEDTHOD_CASH)),
-                ],
-                'filterWidgetOptions' => [
-                    'pluginOptions' => ['allowClear' => true],
-                ],
-                'filterInputOptions'  => [
-                    'placeholder' => t('app', 'Payment Method'),
-                    'id'          => 'grid-search-payment-method',
-                ],
-            ],
+            //            [
+            //                'format'              => 'raw',
+            //                'attribute'           => 'payment_method',
+            //                'value'               => function($model, $key, $index, $column) {
+            //                    return '<span class="label-primary label">' . t('app', slug_to_text($model->payment_method)) . '</span>';
+            //                },
+            //                'filterType'          => GridView::FILTER_SELECT2,
+            //                'filter'              => [
+            //                    Order::PAYMENT_MEDTHOD_COD            => t('app', slug_to_text(Order::PAYMENT_MEDTHOD_COD)),
+            //                    Order::PAYMENT_MEDTHOD_VISA           => t('app', slug_to_text(Order::PAYMENT_MEDTHOD_VISA)),
+            //                    Order::PAYMENT_MEDTHOD_MASTER_CARD    => t('app', slug_to_text(Order::PAYMENT_MEDTHOD_MASTER_CARD)),
+            //                    Order::PAYMENT_MEDTHOD_PAYPAL         => t('app', slug_to_text(Order::PAYMENT_MEDTHOD_PAYPAL)),
+            //                    Order::PAYMENT_MEDTHOD_ONLINE_BANKING => t('app', slug_to_text(Order::PAYMENT_MEDTHOD_ONLINE_BANKING)),
+            //                    Order::PAYMENT_MEDTHOD_CASH           => t('app', slug_to_text(Order::PAYMENT_MEDTHOD_CASH)),
+            //                ],
+            //                'filterWidgetOptions' => [
+            //                    'pluginOptions' => ['allowClear' => true],
+            //                ],
+            //                'filterInputOptions'  => [
+            //                    'placeholder' => t('app', 'Payment Method'),
+            //                    'id'          => 'grid-search-payment-method',
+            //                ],
+            //            ],
             [
                 'format'              => 'raw',
                 'attribute'           => 'include_vat',
@@ -164,6 +167,23 @@ $this->registerJs($search);
                     'placeholder' => t('app', 'Status'),
                     'id'          => 'grid-search-include-vat',
                 ],
+            ],
+            [
+                'format'        => [
+                    'date',
+                    'php:Y-m-d h:s:i',
+                ],
+                'attribute'     => 'created_at',
+                'filterType'    => GridView::FILTER_DATETIME,
+                'headerOptions' => ['style' => 'min-width:150px;'],
+                'pageSummary'   => Yii::t('app', 'Total'),
+            ],
+            [
+                'attribute'   => 'total_price',
+                'format'      => [
+                    'decimal',
+                ],
+                'pageSummary' => true,
             ],
             [
                 'format'              => 'raw',
@@ -210,20 +230,22 @@ $this->registerJs($search);
         $gridColumn[] = grid_view_default_active_column_cofig();
         ?>
         <?= GridView::widget([
-            'dataProvider'   => $dataProvider,
-            'filterModel'    => $searchModel,
-            'columns'        => $gridColumn,
-            'responsiveWrap' => false,
-            'condensed'      => true,
-            'hover'          => true,
-            'pjax'           => true,
-            'pjaxSettings'   => ['options' => ['id' => 'kv-pjax-container-order']],
-            'panel'          => [
+            'dataProvider'    => $dataProvider,
+            'filterModel'     => $searchModel,
+            'columns'         => $gridColumn,
+            'responsiveWrap'  => false,
+            'condensed'       => true,
+            'hover'           => true,
+            'pjax'            => true,
+            'floatHeader'     => true,
+            'pjaxSettings'    => ['options' => ['id' => 'kv-pjax-container-order']],
+            'panel'           => [
                 'type'    => GridView::TYPE_PRIMARY,
                 'heading' => '<span class="glyphicon glyphicon-book"></span>  ' . Html::encode($this->title),
             ],
             // your toolbar can include the additional full export menu
-            'toolbar'        => grid_view_toolbar_config($dataProvider, $gridColumn),
+            'toolbar'         => grid_view_toolbar_config($dataProvider, $gridColumn),
+            'showPageSummary' => true,
         ]); ?>
 
         <div class="row">

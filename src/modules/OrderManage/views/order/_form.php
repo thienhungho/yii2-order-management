@@ -131,8 +131,8 @@ use yii\helpers\Html;
         <?= $form->field($model, 'include_vat', [
             'addon' => ['prepend' => ['content' => '<span class="fa fa-money"></span>']],
         ])->radioButtonGroup([
-            'yes'          => t('app', slug_to_text('yes')),
-            'no'            => t('app', slug_to_text('no')),
+            'yes' => t('app', slug_to_text('yes')),
+            'no'  => t('app', slug_to_text('no')),
         ], [
             'class'       => 'btn-group-sm',
             'itemOptions' => ['labelOptions' => ['class' => 'btn green']],

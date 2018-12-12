@@ -165,11 +165,17 @@ use yii\helpers\Html;
     <div class="col-lg-12 col-xs-12">
 
         <?php
+        $order_items = \yii\helpers\ArrayHelper::toArray($model->orderItems);
+        foreach ($order_items as $order_item) {
+            if (empty($order_item['quantity'])) {
+                $order_item['quantity'] = 1;
+            }
+        }
         $forms = [
             [
                 'label'   => '<i class="glyphicon glyphicon-book"></i> ' . Html::encode(t('app', 'OrderItem')),
                 'content' => $this->render('_formOrderItem', [
-                    'row' => \yii\helpers\ArrayHelper::toArray($model->orderItems),
+                    'row' => $orderItems,
                 ]),
             ],
         ];
