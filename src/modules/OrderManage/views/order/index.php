@@ -4,7 +4,7 @@
 
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-use thienhungho\Widgets\GridView;
+use thienhungho\Widgets\models\GridView;
 use thienhungho\OrderManagement\models\Order;
 use thienhungho\UserManagement\models\User;
 use yii\helpers\Html;

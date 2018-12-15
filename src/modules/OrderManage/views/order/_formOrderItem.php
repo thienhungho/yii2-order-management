@@ -2,7 +2,7 @@
     <?php
 
     use kartik\builder\TabularForm;
-    use thienhungho\Widgets\GridView;
+    use thienhungho\Widgets\models\GridView;
     use yii\data\ArrayDataProvider;
     use yii\helpers\Html;
 

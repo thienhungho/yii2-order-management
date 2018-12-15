@@ -4,7 +4,7 @@
 
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-use thienhungho\Widgets\GridView;
+use thienhungho\Widgets\models\GridView;
 use thienhungho\OrderManagement\models\Order;
 use yii\helpers\Html;
 
@@ -89,6 +89,7 @@ $this->registerJs($search);
                     'placeholder' => t('app', 'Payment Method'),
                     'id'          => 'grid-search-payment-method',
                 ],
+                'pageSummary' => Yii::t('app', 'Total'),
             ],
             [
                 'format'              => 'raw',
@@ -118,7 +119,6 @@ $this->registerJs($search);
                     'placeholder' => t('app', 'Status'),
                     'id'          => 'grid-search-include-vat',
                 ],
-                'pageSummary' => Yii::t('app', 'Total'),
             ],
             [
                 'attribute'   => 'real_value',

@@ -1,5 +1,5 @@
 <?php
-use thienhungho\Widgets\GridView;
+use thienhungho\Widgets\models\GridView;
 use yii\data\ArrayDataProvider;
 
     $dataProvider = new ArrayDataProvider([
