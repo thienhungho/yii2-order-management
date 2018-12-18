@@ -4,6 +4,7 @@ namespace thienhungho\OrderManagement\modules\OrderManage\controllers;
 
 use thienhungho\OrderManagement\models\Order;
 use thienhungho\OrderManagement\modules\OrderManage\search\OrderSearch;
+use thienhungho\UserManagement\models\User;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -83,6 +84,47 @@ class OrderController extends Controller
                 'delivery_address'    => Yii::$app->user->identity->address,
             ]);
         }
+        if ($model->loadAll(request()->post())) {
+            if ($model->saveAll()) {
+                set_flash_has_been_saved();
+
+                return $this->redirect([
+                    'update',
+                    'id' => $model->id,
+                ]);
+            } else {
+                set_flash_has_not_been_saved();
+                print_r($model->errors);
+            }
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * @return string|\yii\web\Response
+     * @throws \yii\db\Exception
+     */
+    public function actionCreateForUser($user_id)
+    {
+        $model = new Order();
+        $user = $this->findUser($user_id);
+        $model = new Order([
+            'customer_username'   => $user->username,
+            'customer_email'      => $user->email,
+            'customer_name'       => $user->full_name,
+            'customer_address'    => $user->address,
+            'customer_company'    => $user->company,
+            'customer_phone'      => $user->phone,
+            'customer_tax_number' => $user->tax_number,
+            'status'              => Order::STATUS_PENDING,
+            'payment_method'      => Order::PAYMENT_MEDTHOD_COD,
+            'include_vat'         => 'no',
+            'ref_by'              => get_current_user_id(),
+            'delivery_address'    => $user->address,
+        ]);
         if ($model->loadAll(request()->post())) {
             if ($model->saveAll()) {
                 set_flash_has_been_saved();
@@ -264,6 +306,21 @@ class OrderController extends Controller
     protected function findModel($id)
     {
         if (($model = Order::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException(t('app', 'The requested page does not exist.'));
+        }
+    }
+
+    /**
+     * @param $id
+     *
+     * @return null|Order
+     * @throws NotFoundHttpException
+     */
+    protected function findUser($id)
+    {
+        if (($model = User::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException(t('app', 'The requested page does not exist.'));
