@@ -98,7 +98,7 @@ class OrderItem extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Product::className(), ['id' => 'product']);
     }
-    
+
     /**
      * @inheritdoc
      * @return array mixed
@@ -108,10 +108,9 @@ class OrderItem extends \yii\db\ActiveRecord
         return [
             'timestamp' => [
                 'class' => TimestampBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
-                ]
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => new \yii\db\Expression('NOW()'),
             ],
         ];
     }
