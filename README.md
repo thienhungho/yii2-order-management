@@ -5,6 +5,8 @@ Order Management System for Yii2
 Installation
 ------------
 
+This is just an example, memorible moment. The source code may not work for known reasons.
+
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
 Either run
